@@ -31,7 +31,7 @@
     "page": "options.html"
   },
   "background": {
-    "scripts": ["windowId-polyfill.js", "background.js"],
+    "scripts": ["default.js", "windowId-polyfill.js", "background.js"],
     "persistent": true
   }
 }
