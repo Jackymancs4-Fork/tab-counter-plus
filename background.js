@@ -161,8 +161,7 @@ async function init() {
   }
 }
 
-browser.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  if (request === "reload") {
+function reset() {
     numTabs = new Map();
     lastTime = new Map();
     allWindows = undefined;
@@ -174,6 +173,11 @@ browser.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     browser.windows.onRemoved.removeListener(windowOnRemovedListener);
 
     init()
+}
+
+browser.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  if (request === "reload") {
+    reset()
   }
 });
 
