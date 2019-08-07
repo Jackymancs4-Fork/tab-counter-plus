@@ -17,24 +17,17 @@
 const numTabs = new Map();
 const lastTime = new Map();
 const allWindows = undefined;
+var svgTemplate;
 
 function svgDataIcon(text) {
   let serializer = new XMLSerializer();
-  let doc = document.implementation.createDocument("http://www.w3.org/2000/svg", "svg", null);
+  let doc = svgTemplate || initSvgTemplate()
   let root = doc.documentElement;
-  root.setAttribute("width", "16");
-  root.setAttribute("height", "16");
-  let node = doc.createElementNS(root.namespaceURI, "text");
-  node.setAttribute("x", "50%");
-  node.setAttribute("y", "50%");
+  let node = root.getElementsByTagNameNS(root.namespaceURI, "text")[0];
   Object.assign(node.style, {
-    dominantBaseline: "central",
-    textAnchor: "middle",
-    fontFamily: "'Segoe UI', 'DejaVu Sans', sans-serif",
     fill: prefs.colorEnabled ? prefs.color : "transparent",
   });
   root.style.backgroundColor = prefs.bgColorEnabled ? prefs.bgColor : "transparent";
-  root.appendChild(node);
   let l = text.length;
   node.style.fontSize = `${14-l}px`;
   if (l > 2) {
@@ -116,7 +109,27 @@ function windowOnRemovedListener(windowId) {
   lastTime.delete(windowId);
 }
 
+function initSvgTemplate() {
+  let doc = document.implementation.createDocument("http://www.w3.org/2000/svg", "svg", null);
+  let root = doc.documentElement;
+  root.setAttribute("width", "16");
+  root.setAttribute("height", "16");
+  let node = doc.createElementNS(root.namespaceURI, "text");
+  node.setAttribute("x", "50%");
+  node.setAttribute("y", "50%");
+  Object.assign(node.style, {
+    dominantBaseline: "central",
+    textAnchor: "middle",
+    fontFamily: "'Segoe UI', 'DejaVu Sans', sans-serif"
+  });
+  root.appendChild(node);
+
+  return doc
+}
+
 async function init() {
+
+  svgTemplate = initSvgTemplate()
   prefs = await browser.storage.local.get(prefs);
 
   if (prefs.useBadge) {
@@ -164,6 +177,7 @@ async function init() {
 function reset() {
     numTabs.clear();
     lastTime.clear();
+    svgTemplate = undefined
 
     browser.tabs.onCreated.removeListener(tabOnCreatedListener);
     browser.tabs.onRemoved.removeListener(tabOnRemovedListener);
