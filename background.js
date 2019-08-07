@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-let numTabs = new Map();
-let lastTime = new Map();
-let allWindows = undefined;
+const numTabs = new Map();
+const lastTime = new Map();
+const allWindows = undefined;
 
 function svgDataIcon(text, prefs) {
   let serializer = new XMLSerializer();
@@ -162,9 +162,8 @@ async function init() {
 }
 
 function reset() {
-    numTabs = new Map();
-    lastTime = new Map();
-    allWindows = undefined;
+    numTabs.clear();
+    lastTime.clear();
 
     browser.tabs.onCreated.removeListener(tabOnCreatedListener);
     browser.tabs.onRemoved.removeListener(tabOnRemovedListener);
