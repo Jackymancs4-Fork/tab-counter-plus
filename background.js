@@ -18,7 +18,7 @@ const numTabs = new Map();
 const lastTime = new Map();
 const allWindows = undefined;
 
-function svgDataIcon(text, prefs) {
+function svgDataIcon(text) {
   let serializer = new XMLSerializer();
   let doc = document.implementation.createDocument("http://www.w3.org/2000/svg", "svg", null);
   let root = doc.documentElement;
@@ -76,7 +76,7 @@ function show(windowId, num = -1) {
     browser.browserAction.setIcon({ path: { 16: "icon16.gif", 64: "icon.svg" }, windowId });
     browser.browserAction.setBadgeText({ text, windowId });
   } else {
-    browser.browserAction.setIcon({ path: svgDataIcon(text, prefs), windowId });
+    browser.browserAction.setIcon({ path: svgDataIcon(text), windowId });
     browser.browserAction.setBadgeText({ text: null, windowId });
   }
 }
